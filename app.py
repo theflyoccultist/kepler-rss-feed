@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import feedparser
@@ -13,21 +13,26 @@ limiter = Limiter(
     default_limits=["300 per hour"]
 )
 
-rss_feeds = [
-    "https://feeds.feedburner.com/TheHackersNews",
-    "https://9to5linux.com/feed/atom"
-]
 
-
-@app.route('/')
+@app.route("/")
 @limiter.limit("5 per minute")
 def index():
-    articles = []
-    for feed_url in rss_feeds:
-        feed = feedparser.parse(feed_url)
-        for entry in feed.entries[:5]:
-            articles.append({"title": entry.title, "link": entry.link})
-    return render_template("index.html", articles=articles)
+    return render_template("index.html", articles=[])
+
+
+@app.route("/fetch", methods=["POST"])
+def fetch():
+    rss_url = request.form.get("rss_url")
+    if not rss_url:
+        return render_template("_articles.html", articles=[])
+
+    feed = feedparser.parse(rss_url)
+    if "title" not in feed.feed:
+        return render_template("_articles.html", articles=[])
+
+    articles = [{"title": entry.title, "link": entry.link}
+                for entry in feed.entries[:5]]
+    return render_template("_articles.html", articles=articles)
 
 
 if __name__ == "__main__":

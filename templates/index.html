@@ -4,27 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RSS Reader</title>
-    <link rel="icon" type="image" href="rssfeedimages/thumb.png">
-    <link rel="stylesheet" href="styles/index.css">
+    <link rel="icon" type="image" href="https://storage.googleapis.com/theflyoccultist/rssfeedimages/thumb.png">
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tiny5&display=swap');
+    </style>
   </head>
+  <style>
+    body {
+      background-image: url("https://storage.googleapis.com/theflyoccultist/rssfeedimages/background.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+    }
+    #logo {
+      display: block;
+      margin: auto;
+    }
+    #container {
+      width: 60%;
+      margin: auto;
+      padding: 1rem 4rem;
+      background: rgba(205, 233, 236, .8);
+    }
+    h1, h2 {
+      font-family: "Tiny5", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>
   <body>
-    {% if articles %}
+    <img id="logo" src="https://storage.googleapis.com/theflyoccultist/rssfeedimages/logo.png" alt="kepler logo">
+
+    <div id="container">
       <h1>My Custom RSS feed</h1>
-    {% else %}
-      <h1>Add new RSS links to get started.</h1>
-    {% endif %}
-    
-    <form hx-post"/fetch" hx-target="feed-results" hx-swap="innerHTML">
-      <input type="text" name="rss-url" placeholder="https://feeds.feedburner.com/TheHackersNews" />
-      <button type="submit">Fetch Feed</button>
-    </form>
+      
+      <form hx-post="/fetch" 
+            hx-target="#feed-results" 
+            hx-swap="innerHTML">
+        <input type="text" name="rss_url" placeholder="Add an RSS URL here." />
+        <button type="submit">Fetch Feed</button>
+      </form>
 
+      <div id="error-message" style="color: red;"></div>
 
-    <ul>
-      {% for article in articles %}
-        <li><a href="{{ article.link }}" target="_blank">{{ article.title|safe }}</a></li>
-      {% endfor %}
-    </ul>
+      <dl>
+        <dt>Examples:</dt>
+        <dd>https://feeds.feedburner.com/TheHackersNews</dd>
+        <dd>https://9to5linux.com/feed/atom</dd>
+      </dl>
+
+      <h2>Results</h2>
+      <div id="feed-results">
+        <!-- Rendered articles goes here --> 
+      </div>
+    </div>
   </body>
 </html>

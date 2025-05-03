@@ -1,5 +1,5 @@
 [project]
-name = "rss-feed"
+name = "kepler-rss-feed"
 version = "0.1.0"
 description = "keep up with the news, but with some aesthetic"
 authors = [
