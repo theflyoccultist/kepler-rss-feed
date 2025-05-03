@@ -22,15 +22,15 @@
     #logo {
       display: block;
       margin: auto;
+      width: 100%;
     }
     #container {
       width: 60%;
       margin: auto;
       padding: 1rem 4rem;
       background: rgba(205, 233, 236, .8);
-
     }
-    dl, dt, #feed-results {
+    #container {
       font-family: "Micro 5", sans-serif;
       font-weight: 400;
       font-style: normal;
@@ -40,6 +40,18 @@
       font-weight: 400;
       font-style: normal;
     }
+    #formcss {
+      display: grid;
+      gap: .5em;
+      width: 60%;
+    }
+    #formcss input,
+    #formcss button {
+      font-family: inherit;
+      border: 1px solid black;
+      background-color: transparent;
+      box-sizing: border-box;
+    }
   </style>
   <body>
     <img id="logo" src="https://storage.googleapis.com/theflyoccultist/rssfeedimages/logo.png" alt="kepler logo">
@@ -47,7 +59,8 @@
     <div id="container">
       <h1>My Custom RSS feed</h1>
       
-      <form hx-post="/fetch" 
+      <form id="formcss"
+            hx-post="/fetch" 
             hx-target="#feed-results" 
             hx-swap="innerHTML">
         <input type="text" name="rss_url" placeholder="Add an RSS URL here." />
@@ -68,4 +81,9 @@
       </div>
     </div>
   </body>
+  <script>
+    window.onload = function() {
+      document.getElementsByName('rss_url').value = '';
+    }
+  </script>
 </html>
