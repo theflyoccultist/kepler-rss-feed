@@ -29,7 +29,7 @@ def main():
     parser.add_argument(
         '--save',
         action='store_true',
-        help='save results into ./rssfeeds.txt'
+        help='save results into ./rss_output.txt'
     )
     args = parser.parse_args()
 

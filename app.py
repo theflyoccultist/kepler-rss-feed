@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+import tempfile
 import feedparser
+# import os
+from flask_limiter.util import get_remote_address
+from flask_limiter import Limiter
+from flask import Flask, render_template, request, send_file  # after_this_request
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -33,6 +35,24 @@ def fetch():
     articles = [{"title": entry.title, "link": entry.link}
                 for entry in feed.entries[:5]]
     return render_template("_articles.html", articles=articles)
+
+
+@app.route("/download", methods=["POST"])
+def download_file():
+    rss_url = request.form.get("rss_url", 'not fetched')
+
+    feed = feedparser.parse(rss_url)
+    articles = [{"title": entry.title, "link": entry.link}
+                for entry in feed.entries[:5]]
+
+    outpt = '\n'.join(f"{a['title']} --> {a['link']}" for a in articles)
+    tmp = tempfile.NamedTemporaryFile(delete=False, mode='wb')
+    tmp.write(outpt.encode('utf-8'))
+    tmp_path = tmp.name
+    tmp.close()
+
+    return send_file(tmp_path, as_attachment=True, mimetype="text/plain",
+                     download_name="feeds.txt")
 
 
 if __name__ == "__main__":

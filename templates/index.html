@@ -52,6 +52,9 @@
       background-color: transparent;
       box-sizing: border-box;
     }
+    #formcss button {
+      cursor: pointer;
+    }
   </style>
   <body>
     <img id="logo" src="https://storage.googleapis.com/theflyoccultist/rssfeedimages/logo.png" alt="kepler logo">
@@ -63,8 +66,9 @@
             hx-post="/fetch" 
             hx-target="#feed-results" 
             hx-swap="innerHTML">
-        <input type="text" name="rss_url" placeholder="Add an RSS URL here." />
+        <input type="text" name="rss_url" placeholder="Add an RSS URL here." maxlength="2048" />
         <button type="submit">Fetch Feed</button>
+        <button hx-post="/download">Download Output</button>
       </form>
 
       <div id="error-message" style="color: red;"></div>
@@ -76,9 +80,12 @@
       </dl>
 
       <h2>Results</h2>
+      <p>Last 5 aricles for each feed:</p>
       <div id="feed-results">
         <!-- Rendered articles goes here --> 
       </div>
+
+
     </div>
   </body>
   <script>
