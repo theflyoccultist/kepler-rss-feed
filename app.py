@@ -3,16 +3,20 @@
 
 import tempfile
 import feedparser
-# import os
-from flask_limiter.util import get_remote_address
+import threading
+import time
+import os
+from datetime import date
 from flask_limiter import Limiter
-from flask import Flask, render_template, request, send_file  # after_this_request
+from flask_limiter.util import get_remote_address
+from flask import Flask, render_template, request, send_file
 
 app = Flask(__name__)
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["300 per hour"]
+    default_limits=["50 per hour"],
+    storage_uri="memory://"
 )
 
 
@@ -52,8 +56,19 @@ def download_file():
     tmp_path = tmp.name
     tmp.close()
 
+    today = date.today()
+    filename = "feed_export_" + date.isoformat(today) + ".txt"
+
     return send_file(tmp_path, as_attachment=True, mimetype="text/plain",
-                     download_name="feeds.txt")
+                     download_name=filename)
+
+    threading.Thread(target=delayed_delete, args=(
+        tmp_path,), daemon=True).start()
+
+
+def delayed_delete(path, delay=10):
+    time.sleep(delay)
+    os.remove(path)
 
 
 if __name__ == "__main__":

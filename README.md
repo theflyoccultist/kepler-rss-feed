@@ -1,37 +1,30 @@
 ## Kepler RSS : An RSS Feed Parser
 
-
 - Access to your feeds both from the web interface and from the command-line.
+
+![Splash screen](public/splash.png)
 
 ### How it's made (website):
 - Python Flask api and feedparser
+- gunicorn as the WSGI server
 - Jinja2 Templating engine and HTMX
 
 Start the app:
 ```sh
-poetry run python app.py
+poetry run python gunicorn -w 4 app:app
 ```
 
 ### Features (website):
 - A retro-futuristic UI
 - Paste an RSS link in the input form, click Fetch Feed and you will retrieve articles.
+- A Download Button will appear, allowing you to download the desired feed as a .txt file.
 
 ### How it's made (cli):
-- It's just a single python file
+- Python argparse and feedparser
 
+Run in the command line:
+```sh
+poetry run python rss-cli.py <your-rss-link>
+```
 
-🧼 Clean file generation flow?
-
-Let’s say your RSS parser generates the file on request. You can:
-
-    Generate a tempfile
-
-    Write the parsed feed contents
-
-    Use send_file or send_from_directory to let users download the file.
-
-    Optionally delete it after (unless you like digital hoarding)
-
-Bonus move? Timestamp the filename with datetime.now().strftime(...) so users get:
-
-feed_export_2025-05-21.txt
+Add a `--save` flag to download the output into a .txt file.

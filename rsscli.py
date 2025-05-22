@@ -17,7 +17,7 @@ def fetch_feed(url, save=False):
         print(a)
 
     if save:
-        with open("rssfeeds.txt", "a") as f:
+        with open("rss_output.txt", "a") as f:
             for a in articles:
                 f.write(a + "\n")
         print("\nArticles saved to rss_output.txt")
