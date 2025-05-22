@@ -44,6 +44,7 @@
       display: grid;
       gap: .5em;
       width: 60%;
+      padding-bottom: .5em;
     }
     #formcss input,
     #formcss button {
@@ -66,9 +67,8 @@
             hx-post="/fetch" 
             hx-target="#feed-results" 
             hx-swap="innerHTML">
-        <input type="text" name="rss_url" placeholder="Add an RSS URL here." maxlength="2048" />
+        <input type="text" name="rss_url" placeholder="Add an RSS URL here." maxlength="1024" />
         <button type="submit">Fetch Feed</button>
-        <button hx-post="/download">Download Output</button>
       </form>
 
       <div id="error-message" style="color: red;"></div>
@@ -80,17 +80,10 @@
       </dl>
 
       <h2>Results</h2>
-      <p>Last 5 aricles for each feed:</p>
       <div id="feed-results">
         <!-- Rendered articles goes here --> 
       </div>
 
-
     </div>
   </body>
-  <script>
-    window.onload = function() {
-      document.getElementsByName('rss_url').value = '';
-    }
-  </script>
 </html>

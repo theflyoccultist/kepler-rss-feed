@@ -34,7 +34,8 @@ def fetch():
 
     articles = [{"title": entry.title, "link": entry.link}
                 for entry in feed.entries[:5]]
-    return render_template("_articles.html", articles=articles)
+    return render_template("_articles.html", articles=articles,
+                           rss_url=rss_url)
 
 
 @app.route("/download", methods=["POST"])
