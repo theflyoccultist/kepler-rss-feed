@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import tempfile
-import feedparser
 import threading
 import time
-import os
 from datetime import date
+
+import feedparser
+from flask import Flask, render_template, request, send_file
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask import Flask, render_template, request, send_file
 
 app = Flask(__name__)
+
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -20,8 +22,8 @@ limiter = Limiter(
 )
 
 
-@app.route("/")
 @limiter.limit("5 per minute")
+@app.route("/")
 def index():
     return render_template("index.html", articles=[])
 
@@ -30,11 +32,11 @@ def index():
 def fetch():
     rss_url = request.form.get("rss_url")
     if not rss_url:
-        return render_template("_articles.html", articles=[])
+        return render_template("_error.html", error_message="not an URL!"), 400
 
     feed = feedparser.parse(rss_url)
     if "title" not in feed.feed:
-        return render_template("_articles.html", articles=[])
+        return render_template("_error.html", error_message="not an URL!"), 400
 
     articles = [{"title": entry.title, "link": entry.link}
                 for entry in feed.entries[:5]]

@@ -1,22 +1,25 @@
 [project]
 name = "kepler-rss-feed"
 version = "0.1.0"
-description = "keep up with the news, but with some aesthetic"
-authors = [
-    {name = "Rin Delahaije",email = "y.delahaije@gmail.com"}
-]
-license = {text = "MIT"}
+description = "Keep up with the news, with a cute retro futuristic page."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
-    "flask (>=3.1.0,<4.0.0)",
-    "jinja2 (>=3.1.6,<4.0.0)",
-    "feedparser (>=6.0.11,<7.0.0)",
-    "flask-limiter (>=3.12,<4.0)",
-    "gunicorn (>=23.0.0,<24.0.0)"
+    "feedparser>=6.0.11",
+    "flask>=3.1.1",
+    "flask-limiter>=3.12",
+    "gunicorn>=23.0.0",
+    "jinja2>=3.1.6",
 ]
 
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "mypy>=1.17.1",
+    "pytest>=8.4.1",
+    "ruff>=0.12.9",
+]
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.pytest.ini_options]
+pythonpath = ["src"]
