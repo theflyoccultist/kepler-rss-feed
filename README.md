@@ -9,21 +9,15 @@
 - gunicorn as the WSGI server
 - Jinja2 Templating engine and HTMX
 
-For now:
 
-```bash
-uv run python src/app.py
-
-```
 Start the app in a dev environment:
 ```bash
 uv run python src/app.py
-
 ```
 
 Start the app in a prod environment:
 ```sh
-poetry run python gunicorn -w 4 app:app
+uv run python gunicorn -w 4 app:app
 ```
 
 ### Features (website):
@@ -37,7 +31,7 @@ poetry run python gunicorn -w 4 app:app
 
 Run in the command line:
 ```sh
-poetry run python rss-cli.py <your-rss-link>
+uv run python rss-cli.py <your-rss-link>
 ```
 
 Add a `--save` flag to download the output into a .txt file.

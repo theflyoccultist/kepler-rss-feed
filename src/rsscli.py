@@ -9,9 +9,7 @@ def fetch_feed(url, save=False):
         print("No articles found or invalid RSS URL.")
         return
 
-    articles = [
-        f"{entry.title} --> {entry.link}" for entry in feed.entries[:5]
-    ]
+    articles = [f"{entry.title} --> {entry.link}" for entry in feed.entries[:5]]
 
     print("\n=== Headlines ===")
     for a in articles:
@@ -26,11 +24,9 @@ def fetch_feed(url, save=False):
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch RSS feed headlines.")
-    parser.add_argument('url', help='RSS Feed URL')
+    parser.add_argument("url", help="RSS Feed URL")
     parser.add_argument(
-        '--save',
-        action='store_true',
-        help='save results into ./rss_output.txt'
+        "--save", action="store_true", help="save results into ./rss_output.txt"
     )
     args = parser.parse_args()
 
