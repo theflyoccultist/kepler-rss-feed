@@ -29,11 +29,11 @@ def index():
 def fetch():
     rss_url = request.form.get("rss_url")
     if not rss_url:
-        return render_template("_error.html", error_message="not an URL!"), 400
+        return render_template("_error.html", error_message="not an URL!")
 
     feed = feedparser.parse(rss_url)
     if "title" not in feed.feed:
-        return render_template("_error.html", error_message="not an URL!"), 400
+        return render_template("_error.html", error_message="not an URL!")
 
     articles = [
         {"title": entry.title, "link": entry.link} for entry in feed.entries[:5]
@@ -63,7 +63,8 @@ def download_file():
         tmp_path, as_attachment=True, mimetype="text/plain", download_name=filename
     )
 
-    threading.Thread(target=delayed_delete, args=(tmp_path,), daemon=True).start()
+    threading.Thread(target=delayed_delete, args=(
+        tmp_path,), daemon=True).start()
 
 
 def delayed_delete(path, delay=10):
