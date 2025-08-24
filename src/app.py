@@ -6,9 +6,10 @@ import tempfile
 import threading
 import time
 from datetime import date
+from typing import Any, Dict, List, Optional, Union
 
 import feedparser
-from flask import Flask, render_template, request, send_file
+from flask import Flask, Response, render_template, request, send_file
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -26,45 +27,44 @@ def index():
 
 
 @app.route("/fetch", methods=["POST"])
-def fetch():
-    rss_url = request.form.get("rss_url")
+def fetch() -> Union[str, Response]:
+    rss_url: Optional[str] = request.form.get("rss_url")
     if not rss_url:
         return render_template("_error.html", error_message="not an URL!")
 
-    feed = feedparser.parse(rss_url)
-    if "title" not in feed.feed:
+    feed: Any = feedparser.parse(rss_url)
+    if "title" not in feed.get("feed", {}):
         return render_template("_error.html", error_message="not an URL!")
 
-    articles = [
+    articles: List[Dict[str, str]] = [
         {"title": entry.title, "link": entry.link} for entry in feed.entries[:5]
     ]
     return render_template("_articles.html", articles=articles, rss_url=rss_url)
 
 
 @app.route("/download", methods=["POST"])
-def download_file():
-    rss_url = request.form.get("rss_url", "not fetched")
+def download_file() -> Response:
+    rss_url: Optional[str] = request.form.get("rss_url", "not fetched")
 
-    feed = feedparser.parse(rss_url)
-    articles = [
+    feed: Any = feedparser.parse(rss_url)
+    articles: List[Dict[str, str]] = [
         {"title": entry.title, "link": entry.link} for entry in feed.entries[:5]
     ]
 
-    outpt = "\n".join(f"{a['title']} --> {a['link']}" for a in articles)
+    outpt: str = "\n".join(f"{a['title']} --> {a['link']}" for a in articles)
     tmp = tempfile.NamedTemporaryFile(delete=False, mode="wb")
     tmp.write(outpt.encode("utf-8"))
     tmp_path = tmp.name
     tmp.close()
 
-    today = date.today()
-    filename = "feed_export_" + date.isoformat(today) + ".txt"
+    today: date = date.today()
+    filename: str = "feed_export_" + date.isoformat(today) + ".txt"
 
     return send_file(
         tmp_path, as_attachment=True, mimetype="text/plain", download_name=filename
     )
 
-    threading.Thread(target=delayed_delete, args=(
-        tmp_path,), daemon=True).start()
+    threading.Thread(target=delayed_delete, args=(tmp_path,), daemon=True).start()
 
 
 def delayed_delete(path, delay=10):
