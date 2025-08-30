@@ -5,6 +5,7 @@
 ![Splash screen](public/splash.png)
 
 ### How it's made (website):
+
 - Python Flask api and feedparser
 - gunicorn as the WSGI server
 - Jinja2 Templating engine and HTMX
@@ -17,7 +18,7 @@ uv run python src/app.py
 
 Start the app in a prod environment:
 ```sh
-uv run python gunicorn -w 4 app:app
+uv run gunicorn -w 4 src.app:app
 ```
 
 ### Features (website):
@@ -27,11 +28,14 @@ uv run python gunicorn -w 4 app:app
 - A Download Button will appear, allowing you to download the desired feed as a .txt file.
 
 ### How it's made (cli):
+
 - Python argparse and feedparser
 
 Run in the command line:
 ```sh
-uv run python rss-cli.py <your-rss-link>
+uv run python src/rsscli.py <your-rss-link>
 ```
 
 Add a `--save` flag to download the output into a .txt file.
+
+Use the `-h` flag to display help and more useful messages.
